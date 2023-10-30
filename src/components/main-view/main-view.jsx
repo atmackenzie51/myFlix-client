@@ -13,17 +13,16 @@ export const MainView = () => {
     fetch("https://movieflix-app-d827ee527a6d.herokuapp.com/movies")
       .then((response) => response.json())
       .then((data) => {
-        const moviesFromApi = data.docs.map((doc) => {
+        const moviesFromApi = data.map((movie) => {
           return {
-            id: doc.key,
-            title: doc.title,
-            image: doc.image,
-            genre: doc.genre,
-            director: doc.director
+            id: movie._id,
+            title: movie.Title,
+            genre: movie.Genre,
+            director: movie.Director
           };
         });
 
-        setMovies(moviesFromApi)
+        setMovies(moviesFromApi);
       });
   }, []);
 
@@ -41,7 +40,7 @@ export const MainView = () => {
     <div>
       {movies.map((movie) => (
         <MovieCard
-          key={movie.id}
+          key={movie._id}
           movie={movie}
           onMovieClick={(newSelectedMovie) => {
             setSelectedMovie(newSelectedMovie);
