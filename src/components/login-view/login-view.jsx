@@ -10,8 +10,8 @@ export const LoginView = ({ onLoggedIn }) => {
 
 
     const data = {
-      access: username,
-      secret: password
+      Username: username,
+      Password: password
     };
 
     fetch("https://movieflix-app-d827ee527a6d.herokuapp.com/login", {
@@ -20,7 +20,6 @@ export const LoginView = ({ onLoggedIn }) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(data),
-      mode: "cors"
     })
       .then((response) => response.json())
       .then((data) => {
@@ -34,6 +33,7 @@ export const LoginView = ({ onLoggedIn }) => {
         }
       })
       .catch((e) => {
+        console.error("Error during login:", error);
         alert("Something went wrong!");
       });
   };
