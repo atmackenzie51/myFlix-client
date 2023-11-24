@@ -27,18 +27,6 @@ export const MainView = () => {
         setMovies(movies);
       });
   }, [token]);
-  /*        const moviesFromApi = data.map((movie) => {
-            return {
-              id: movie._id,
-              title: movie.Title,
-              genre: movie.Genre,
-              director: movie.Director
-            };
-          });
-  
-          setMovies(moviesFromApi);
-        });
-    }, []);*/
 
   if (!user) {
     return (
