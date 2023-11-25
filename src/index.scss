@@ -1,1 +1,55 @@
+// Background for the whole app
+$body-bg: #455d7a;
+
+// Button color
+$primary: #f95959;
+
+// Font color
+$body-color: black;
+
+$border-default: 2px solid black;
+
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
+
+
+.button-custom {
+  background-color: $primary;
+  color: $body-color;
+  transition: background-color 0.3s ease;
+  border: $border-default;
+
+  &:hover {
+    background-color: darken($primary, 30%); // Darken the background color on hover
+  }
+}
+
+.logout-button {
+  background-color: black;
+  color: white;
+  transition: background-color 0.3s ease;
+  border: $border-default;
+
+  &:hover {
+    background-color: lighten(black, 30%); // Darken the background color on hover
+  }
+}
+
+.movie-button {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.shared-style {
+  background-color: #e3e3e3;
+  border: $border-default;
+}
+
+.signup-login-page,
+.movie-card {
+  @extend .shared-style;
+}
+
+.form-input {
+  background-color: darken(#e3e3e3, 30%);
+}
