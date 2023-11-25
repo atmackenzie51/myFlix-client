@@ -32,18 +32,21 @@ export const MainView = () => {
 
   return (
     <>
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-md-center mt-3">
         {!user ? (
-          <Col md={5}>
-            <LoginView
-              onLoggedIn={(user, token) => {
-                setUser(user);
-                setToken(token);
-              }}
-            />
-            or
-            <SignupView />
-          </Col>
+          <>
+            <Col md={4}>
+              <LoginView
+                onLoggedIn={(user, token) => {
+                  setUser(user);
+                  setToken(token);
+                }}
+              />
+            </Col>
+            <Col md={5}>
+              <SignupView className="mt-3" />
+            </Col>
+          </>
         ) : selectedMovie ? (
           <Col md={8}>
             <MovieView
@@ -69,7 +72,7 @@ export const MainView = () => {
         )}
       </Row>
 
-      {token && (<button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}> Logout </button>)}
+      {token && (<button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }} className="logout-button"> Logout </button>)}
     </>
   );
 };
