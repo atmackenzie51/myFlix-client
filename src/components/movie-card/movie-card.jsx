@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 
-export const MovieCard = ({ movie, onMovieClick }) => {
+export const MovieCard = ({ movie }) => {
   return (
     <Card className="h-100 movie-card">
       <Card.Img variant="top" src={movie.ImagePath} />
@@ -11,12 +12,9 @@ export const MovieCard = ({ movie, onMovieClick }) => {
         <Card.Title>{movie.Title}</Card.Title>
         <Card.Text>{movie.Director.Name}</Card.Text>
         <Card.Text>{movie.Genre.Name}</Card.Text>
-        <Button
-          className="button-custom"
-          onClick={() => onMovieClick(movie)}
-        >
-          View Details
-        </Button>
+        <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
+          <Button variant="link">Open</Button>
+        </Link>
       </Card.Body>
     </Card>
   );
@@ -40,5 +38,4 @@ MovieCard.propTypes = {
       }),
     ImagePath: PropTypes.string.isRequired
   }).isRequired,
-  onMovieClick: PropTypes.func.isRequired
 };
