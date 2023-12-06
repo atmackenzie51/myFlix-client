@@ -18,14 +18,12 @@ export const ProfileView = () => {
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
 
-  const handleSubmit = (event) => {
+  const handleUpdate = (event) => {
     event.preventDefault();
 
     const data = {
-      Username: username,
-      Password: password,
-      Email: email,
-      Birthday: birthday
+      Username: newUsername
+
     };
 
     fetch(`https://movieflix-app-d827ee527a6d.herokuapp.com/users/${user.Username}`, {
@@ -67,7 +65,7 @@ export const ProfileView = () => {
         </Col>
       </Row>
 
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleUpdate}>
         <Form.Group >
           <Form.Label>Update Username:</Form.Label>
           <Form.Control
@@ -75,7 +73,6 @@ export const ProfileView = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
             minLength="3"
             placeholder="username must be at least 3 characters"
           />
