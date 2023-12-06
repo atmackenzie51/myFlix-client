@@ -13,25 +13,27 @@ export const ProfileView = () => {
   const [birthday, setBirthday] = useState(user ? user.Birthday : "");
   const [favMovies, setFavMovies] = useState(user ? user.FavoriteMovies : "");
 
+  //changes the change to a more user friendly date
   const formatDate = (dateString) => {
     const options = { day: "numeric", month: "short", year: "numeric" };
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
 
+  //update user profile information
   const handleUpdate = (event) => {
     event.preventDefault();
 
     const data = {
-      Username: newUsername
+      Username: username
 
     };
 
-    fetch(`https://movieflix-app-d827ee527a6d.herokuapp.com/users/${user.Username}`, {
+    fetch(`https://movieflix-app-d827ee527a6d.herokuapp.com/users/${username}`, {
       method: "PUT",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${storedToken}`
       }
     }).then(async (response) => {
       console.log(response)
@@ -69,7 +71,6 @@ export const ProfileView = () => {
         <Form.Group >
           <Form.Label>Update Username:</Form.Label>
           <Form.Control
-            className="form-input"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -77,8 +78,8 @@ export const ProfileView = () => {
             placeholder="username must be at least 3 characters"
           />
         </Form.Group>
-        <Button className="button-custom" type="submit">
-          Submit
+        <Button className="button-custom" type="submit" onClick={handleUpdate}>
+          Update
         </Button>
       </Form>
 
