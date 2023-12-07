@@ -72,7 +72,6 @@ export const ProfileView = () => {
           <Form.Label>Update Username:</Form.Label>
           <Form.Control
             type="text"
-            value={username}
             onChange={(e) => setUsername(e.target.value)}
             minLength="3"
             placeholder="username must be at least 3 characters"
