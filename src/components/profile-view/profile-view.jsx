@@ -4,10 +4,14 @@ import { Button, Card, Form, CardGroup } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 
 export const ProfileView = () => {
+  //Getting the user and token from the local cache 
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
+
+
   const [user, setUser] = useState(storedUser ? storedUser : null);
-  const [username, setUsername] = useState(user ? user.Username : "");
+  const [username, setUsername] = useState(user.Username);
+  const [birthday, setBirthday] = useState(user.Birthday);
   /* const [password, setPassword] = useState(user ? user.Password : "");
    const [email, setEmail] = useState(user ? user.Email : "");
    const [birthday, setBirthday] = useState(user ? user.Birthday : "");
@@ -23,14 +27,15 @@ export const ProfileView = () => {
   const handleUpdate = (event) => {
     event.preventDefault();
 
-    const data = {
-      Username: username
+    const updatedData = {
+      Username: username,
+      Birthday: birthday
 
     };
 
     fetch(`https://movieflix-app-d827ee527a6d.herokuapp.com/users/${storedUser.Username}`, {
       method: "PUT",
-      body: JSON.stringify(data),
+      body: JSON.stringify(updatedData),
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${storedToken}`
@@ -69,12 +74,11 @@ export const ProfileView = () => {
 
       <Form onSubmit={handleUpdate}>
         <Form.Group >
-          <Form.Label>Update Username:</Form.Label>
+          <Form.Label>Update Birthday:</Form.Label>
           <Form.Control
             type="text"
-            onChange={(e) => setUsername(e.target.value)}
-            minLength="3"
-            placeholder="username must be at least 3 characters"
+            onChange={(e) => setBirthday(e.target.value)}
+            placeholder="mm/dd/yyyy"
           />
         </Form.Group>
         <Button className="button-custom" type="submit">
