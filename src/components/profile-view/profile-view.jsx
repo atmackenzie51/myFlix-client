@@ -8,12 +8,12 @@ export const ProfileView = () => {
   const storedToken = localStorage.getItem("token");
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [username, setUsername] = useState(user ? user.Username : "");
-  const [password, setPassword] = useState(user ? user.Password : "");
-  const [email, setEmail] = useState(user ? user.Email : "");
-  const [birthday, setBirthday] = useState(user ? user.Birthday : "");
-  const [favMovies, setFavMovies] = useState(user ? user.FavoriteMovies : "");
+  /* const [password, setPassword] = useState(user ? user.Password : "");
+   const [email, setEmail] = useState(user ? user.Email : "");
+   const [birthday, setBirthday] = useState(user ? user.Birthday : "");
+   const [favMovies, setFavMovies] = useState(user ? user.FavoriteMovies : "");*/
 
-  //changes the change to a more user friendly date
+  //changes the change to a more readable date format
   const formatDate = (dateString) => {
     const options = { day: "numeric", month: "short", year: "numeric" };
     return new Date(dateString).toLocaleDateString("en-US", options);
@@ -28,7 +28,7 @@ export const ProfileView = () => {
 
     };
 
-    fetch(`https://movieflix-app-d827ee527a6d.herokuapp.com/users/${username}`, {
+    fetch(`https://movieflix-app-d827ee527a6d.herokuapp.com/users/${storedUser.Username}`, {
       method: "PUT",
       body: JSON.stringify(data),
       headers: {
@@ -58,10 +58,10 @@ export const ProfileView = () => {
           <Card className="w-50">
             <Card.Body>
               <Card.Title>Profile Information:</Card.Title>
-              <Card.Text>Username : {username}</Card.Text>
-              <Card.Text>Email : {email}</Card.Text>
-              <Card.Text>Birthday: {formatDate(birthday)}</Card.Text>
-              <Card.Text>Favorite Movies: {favMovies}</Card.Text>
+              <Card.Text>Username : {storedUser.Username}</Card.Text>
+              <Card.Text>Email : {storedUser.Email}</Card.Text>
+              <Card.Text>Birthday: {formatDate(storedUser.Birthday)}</Card.Text>
+              <Card.Text>Favorite Movies: {storedUser.favoriteMovies}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -78,7 +78,7 @@ export const ProfileView = () => {
             placeholder="username must be at least 3 characters"
           />
         </Form.Group>
-        <Button className="button-custom" type="submit" onClick={handleUpdate}>
+        <Button className="button-custom" type="submit">
           Update
         </Button>
       </Form>
