@@ -12,10 +12,9 @@ export const ProfileView = () => {
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [username, setUsername] = useState(user.Username);
   const [birthday, setBirthday] = useState(user.Birthday);
-  /* const [password, setPassword] = useState(user ? user.Password : "");
-   const [email, setEmail] = useState(user ? user.Email : "");
-   const [birthday, setBirthday] = useState(user ? user.Birthday : "");
-   const [favMovies, setFavMovies] = useState(user ? user.FavoriteMovies : "");*/
+  const [password, setPassword] = useState(user.Password);
+  const [email, setEmail] = useState(user.Email);
+  const [favMovies, setFavMovies] = useState(user.FavoriteMovies);
 
   //changes the change to a more readable date format
   const formatDate = (dateString) => {
@@ -29,7 +28,9 @@ export const ProfileView = () => {
 
     const updatedData = {
       Username: username,
-      Birthday: birthday
+      Birthday: birthday,
+      Email: email,
+      Password: password
 
     };
 
@@ -47,6 +48,7 @@ export const ProfileView = () => {
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
         alert("Update was successful");
+
       } else {
         alert("Update failed")
       }
@@ -56,11 +58,11 @@ export const ProfileView = () => {
   };
 
   return (
-    <Container>
+    <Container className="justify-content-md-center">
       {/* This displays the current user's profile information */}
       <Row>
         <Col>
-          <Card className="w-50">
+          <Card>
             <Card.Body>
               <Card.Title>Profile Information:</Card.Title>
               <Card.Text>Username : {storedUser.Username}</Card.Text>
@@ -70,21 +72,59 @@ export const ProfileView = () => {
             </Card.Body>
           </Card>
         </Col>
+        <Col>
+          <Card>
+            <Card.Title>Update Profile</Card.Title>
+            <Form onSubmit={handleUpdate}>
+              <Form.Group >
+                <Form.Label>Update Username:</Form.Label>
+                <Form.Control
+                  className="form-input"
+                  type="text"
+                  onChange={(e) => setUsername(e.target.value)}
+                  minLength="5"
+                  placeholder="min length 5"
+                  value={username}
+                />
+              </Form.Group>
+
+              <Form.Group >
+                <Form.Label>Update Password:</Form.Label>
+                <Form.Control
+                  className="form-input"
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group >
+                <Form.Label>Update Email:</Form.Label>
+                <Form.Control
+                  className="form-input"
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                />
+              </Form.Group>
+
+              <Form.Group >
+                <Form.Label>Update Birthday:</Form.Label>
+                <Form.Control
+                  className="form-input"
+                  type="date"
+                  onChange={(e) => setBirthday(e.target.value)}
+                  placeholder="mm/dd/yyyy"
+                  value={birthday}
+                />
+              </Form.Group>
+              <Button className="button-custom" type="submit">
+                Update
+              </Button>
+            </Form>
+          </Card>
+        </Col>
       </Row>
 
-      <Form onSubmit={handleUpdate}>
-        <Form.Group >
-          <Form.Label>Update Birthday:</Form.Label>
-          <Form.Control
-            type="text"
-            onChange={(e) => setBirthday(e.target.value)}
-            placeholder="mm/dd/yyyy"
-          />
-        </Form.Group>
-        <Button className="button-custom" type="submit">
-          Update
-        </Button>
-      </Form>
 
     </Container>
   );
