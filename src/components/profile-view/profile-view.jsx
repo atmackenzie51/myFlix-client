@@ -10,11 +10,11 @@ export const ProfileView = () => {
 
 
   const [user, setUser] = useState(storedUser ? storedUser : null);
-  const [username, setUsername] = useState(user.Username);
-  const [birthday, setBirthday] = useState(user.Birthday);
-  const [password, setPassword] = useState(user.Password);
-  const [email, setEmail] = useState(user.Email);
-  const [favMovies, setFavMovies] = useState(user.FavoriteMovies);
+  const [username, setUsername] = useState(user ? user.Username : "");
+  const [birthday, setBirthday] = useState(user ? user.Birthday : "");
+  const [password, setPassword] = useState(user ? user.Password : "");
+  const [email, setEmail] = useState(user ? user.Email : "");
+  const [favMovies, setFavMovies] = useState(user ? user.FavoriteMovies : "");
 
   //changes the change to a more readable date format
   const formatDate = (dateString) => {
@@ -30,8 +30,6 @@ export const ProfileView = () => {
       Username: username,
       Birthday: birthday,
       Email: email,
-      Password: password
-
     };
 
     fetch(`https://movieflix-app-d827ee527a6d.herokuapp.com/users/${storedUser.Username}`, {
@@ -84,7 +82,6 @@ export const ProfileView = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   minLength="5"
                   placeholder="min length 5"
-                  value={username}
                 />
               </Form.Group>
 
@@ -103,7 +100,6 @@ export const ProfileView = () => {
                   className="form-input"
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
-                  value={email}
                 />
               </Form.Group>
 
@@ -114,7 +110,6 @@ export const ProfileView = () => {
                   type="date"
                   onChange={(e) => setBirthday(e.target.value)}
                   placeholder="mm/dd/yyyy"
-                  value={birthday}
                 />
               </Form.Group>
               <Button className="button-custom" type="submit">
