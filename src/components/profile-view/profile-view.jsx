@@ -18,7 +18,7 @@ export const ProfileView = () => {
 
   //changes the change to a more readable date format
   const formatDate = (dateString) => {
-    const options = { day: "numeric", month: "short", year: "numeric" };
+    const options = { day: "numeric", month: "short", year: "numeric", timeZone: "America/New_York" };
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
 
@@ -46,7 +46,7 @@ export const ProfileView = () => {
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
         alert("Update was successful");
-
+        window.location.reload();
       } else {
         alert("Update failed")
       }
