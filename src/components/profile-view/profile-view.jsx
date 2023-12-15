@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 import { Button, Card, Form, CardGroup } from "react-bootstrap";
-import { MovieCard } from "../movie-card/movie-card";
+import { useNavigate } from "react-router-dom";
+
 
 export const ProfileView = () => {
   //Getting the user and token from the local cache 
@@ -16,13 +17,7 @@ export const ProfileView = () => {
   const [email, setEmail] = useState(user ? user.Email : "");
   const [favMovies, setFavMovies] = useState(user ? user.FavoriteMovies : "");
 
-  //changes the change to a more readable date format
-  const formatDate = (dateString) => {
-    const options = { day: "numeric", month: "short", year: "numeric", timeZone: "America/New_York" };
-    return new Date(dateString).toLocaleDateString("en-US", options);
-  };
-
-  //update user profile information
+  //update user profile
   const handleUpdate = (event) => {
     event.preventDefault();
 
@@ -55,6 +50,30 @@ export const ProfileView = () => {
     });
   };
 
+
+  // delete user profile
+  const navigate = useNavigate();
+
+  const handleDelete = () => {
+    fetch(`https://movieflix-app-d827ee527a6d.herokuapp.com/users/${storedUser.Username}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${storedToken}`
+      }
+    }).then((response) => {
+      if (response.ok) {
+        setUser(null);
+        alert("Your profile has been deleted");
+        navigate("/"); // navigates to the login screen
+      } else {
+        alert("Something went wrong.");
+      }
+    }).catch(error => {
+      console.error('Error: ', error);
+    });
+  };
+
+
   return (
     <Container className="justify-content-md-center">
       {/* This displays the current user's profile information */}
@@ -65,7 +84,7 @@ export const ProfileView = () => {
               <Card.Title>Profile Information:</Card.Title>
               <Card.Text>Username : {storedUser.Username}</Card.Text>
               <Card.Text>Email : {storedUser.Email}</Card.Text>
-              <Card.Text>Birthday: {formatDate(storedUser.Birthday)}</Card.Text>
+              <Card.Text>Birthday: {storedUser.Birthday}</Card.Text>
               <Card.Text>Favorite Movies: {storedUser.favoriteMovies}</Card.Text>
             </Card.Body>
           </Card>
@@ -114,6 +133,12 @@ export const ProfileView = () => {
               </Form.Group>
               <Button className="button-custom" type="submit">
                 Update
+              </Button>
+            </Form>
+            <Form onSubmit={handleDelete}>
+              <Form.Label>Delete Profile Here</Form.Label>
+              <Button className="button-custom" type="submit">
+                Delete
               </Button>
             </Form>
           </Card>
