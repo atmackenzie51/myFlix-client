@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 import { Button, Card, Form, CardGroup } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 
 
-export const ProfileView = () => {
+export const ProfileView = ({ onDeleteAccount }) => {
   //Getting the user and token from the local cache 
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const storedToken = localStorage.getItem("token");
@@ -41,7 +40,6 @@ export const ProfileView = () => {
         localStorage.setItem('user', JSON.stringify(updatedUser));
         setUser(updatedUser);
         alert("Update was successful");
-        window.location.reload();
       } else {
         alert("Update failed")
       }
@@ -52,9 +50,9 @@ export const ProfileView = () => {
 
 
   // delete user profile
-  const navigate = useNavigate();
+  const handleDelete = (event) => {
+    event.preventDefault();
 
-  const handleDelete = () => {
     fetch(`https://movieflix-app-d827ee527a6d.herokuapp.com/users/${storedUser.Username}`, {
       method: "DELETE",
       headers: {
@@ -62,9 +60,9 @@ export const ProfileView = () => {
       }
     }).then((response) => {
       if (response.ok) {
-        setUser(null);
         alert("Your profile has been deleted");
-        navigate("/"); // navigates to the login screen
+        console.log("The profile has been deleted");
+        onDeleteAccount();
       } else {
         alert("Something went wrong.");
       }
@@ -84,7 +82,7 @@ export const ProfileView = () => {
               <Card.Title>Profile Information:</Card.Title>
               <Card.Text>Username : {storedUser.Username}</Card.Text>
               <Card.Text>Email : {storedUser.Email}</Card.Text>
-              <Card.Text>Birthday: {storedUser.Birthday}</Card.Text>
+              <Card.Text>Birthday: {new Date(storedUser.Birthday).toUTCString().replace('T', ' ').substr(0, 16)}</Card.Text>
               <Card.Text>Favorite Movies: {storedUser.favoriteMovies}</Card.Text>
             </Card.Body>
           </Card>
@@ -135,9 +133,9 @@ export const ProfileView = () => {
                 Update
               </Button>
             </Form>
-            <Form onSubmit={handleDelete}>
+            <Form>
               <Form.Label>Delete Profile Here</Form.Label>
-              <Button className="button-custom" type="submit">
+              <Button onClick={handleDelete} className="button-custom" type="submit">
                 Delete
               </Button>
             </Form>
