@@ -23,6 +23,7 @@ export const MainView = () => {
       return;
     }
 
+    //GET the movies list
     fetch("https://movieflix-app-d827ee527a6d.herokuapp.com/movies", {
       headers: { Authorization: `Bearer ${token}` }
     })
