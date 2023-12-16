@@ -16,7 +16,7 @@ export const MainView = () => {
   const [movies, setMovies] = useState([]);
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
-  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     if (!token) {
@@ -32,19 +32,21 @@ export const MainView = () => {
       })
       .catch((error) => {
         console.error("Error fetching movies", error);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }, [token]);
+
+  const clearSession = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.clear();
+  }
+
 
   return (
     <BrowserRouter>
       <NavigationBar
         user={user}
-        onLoggedOut={() => {
-          setUser(null), setToken(null), localStorage.clear();
-        }}
+        onLoggedOut={clearSession}
       />
       <Row className="justify-content-md-center mt-3">
         <Routes>
@@ -67,11 +69,9 @@ export const MainView = () => {
             element={
               <>
                 {user ? (
-                  <ProfileView />
+                  <ProfileView onDeleteAccount={clearSession} />
                 ) : (
-                  <Col md={6}>
-                    <LoginView onLoggedIn={(user) => setUser(user)} />
-                  </Col>
+                  <Navigate to="/signup" replace />
                 )}
               </>
             }
@@ -84,7 +84,11 @@ export const MainView = () => {
                   <Navigate to="/" replace />
                 ) : (
                   <Col md={6}>
-                    <LoginView onLoggedIn={(user) => setUser(user)} />
+                    <LoginView onLoggedIn={(user, token) => {
+                      setUser(user);
+                      setToken(token)
+                    }
+                    } />
                   </Col>
                 )}
               </>
@@ -96,8 +100,6 @@ export const MainView = () => {
               <>
                 {!user ? (
                   <Navigate to="/login" replace />
-                ) : loading ? (
-                  <Col> Loading... </Col>
                 ) : movies.length === 0 ? (
                   <Col>The list is empty</Col>
                 ) : (
@@ -114,10 +116,6 @@ export const MainView = () => {
               <>
                 {!user ? (
                   <Navigate to="/login" replace />
-                ) : loading ? (
-                  <Col> Loading... </Col>
-                ) : movies.length === 0 ? (
-                  <Col>The list is empty</Col>
                 ) : (
                   <>
                     {movies.map((movie) => (
