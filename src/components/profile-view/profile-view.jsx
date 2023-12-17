@@ -15,7 +15,7 @@ export const ProfileView = ({ onDeleteAccount }) => {
   const [password, setPassword] = useState(user ? user.Password : "");
   const [email, setEmail] = useState(user ? user.Email : "");
 
-  //let favMovies = movies.filter((m) => user.favoriteMovies.includes(m._id));
+  let favMovies = user.favoriteMovies ? movies.filter((movie) => user.favoriteMovies.includes(movie._id)) : [];
 
   //update user profile
   const handleUpdate = (event) => {
@@ -84,7 +84,7 @@ export const ProfileView = ({ onDeleteAccount }) => {
               <Card.Text>Username : {storedUser.Username}</Card.Text>
               <Card.Text>Email : {storedUser.Email}</Card.Text>
               <Card.Text>Birthday: {new Date(storedUser.Birthday).toUTCString().replace('T', ' ').substr(0, 16)}</Card.Text>
-              <Card.Text>Favorite Movies: {storedUser.favoriteMovies}</Card.Text>
+              <Card.Text>Favorite Movies: {storedUser.FavoriteMovies}</Card.Text>
             </Card.Body>
           </Card>
         </Col>

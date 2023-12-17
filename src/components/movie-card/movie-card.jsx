@@ -5,48 +5,53 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 
-export const MovieCard = ({ movie }) => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const storedToken = localStorage.getItem("token");
-
-  const [user, setUser] = useState(storedUser ? storedUser : null);
-  const [favMovie, setFavMovie] = useState(user ? user.FavoriteMovies : "");
+export const MovieCard = ({ movie, user, setUser, token }) => {
+  const [favMovies, setfavMovies] = useState(user ? user.FavoriteMovies : "");
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    console.log(user);
-    if (user.FavoriteMovies && user.FavoriteMovies.includes(movie._id)) {
-      setFavMovie(true);
-    }
+    setfavMovies(user ? user.FavoriteMovies : "");
   }, [user]);
+
+  useEffect(() => {
+    if (favMovies && favMovies !== "" && favMovies.includes(movie._id)) {
+      setIsFavorite(true);
+    } else {
+      setIsFavorite(false);
+    }
+  }, [favMovies, movie._id]);
+
 
   const addFavoriteMovie = () => {
     fetch(
-      `https://movieflix-app-d827ee527a6d.herokuapp.com/users/${storedUser.Username}/movies/${movie._id}`,
-      {
-        method: "POST",
-        headers: { Authorization: `Bearer ${storedToken}` }
-      }
+      `https://movieflix-app-d827ee527a6d.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
+      { method: "POST", headers: { Authorization: `Bearer ${token}` } }
     )
-      .then((response) => {
+      .then(async (response) => {
+        console.log(response)
         if (response.ok) {
-          return response.json();
+          const updatedUser = await response.json();
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+          setUser(updatedUser);
+          alert("Favorite added");
         } else {
-          console.log("failed to add fav movie");
+          console.log("Failed to add fav movie");
         }
       })
-      .then((response) => {
-        if (response.ok) {
+      .then((user) => {
+        if (user) {
+          alert("successfully added to favorites");
           localStorage.setItem("user", JSON.stringify(user));
           setUser(user);
-          setFavMovie(true);
-          console.log("sucessfully added to favs");
-          console.log(user.FavoriteMovies);
+          setIsFavorite(true);
         }
       })
-      .catch((err) => {
-        console.log(`error on favmovies: ${err}`);
+      .catch((error) => {
+        alert(error);
       });
   };
+
+
   return (
     <Card className="h-100 movie-card">
       <Card.Img variant="top" src={movie.ImagePath} />
@@ -55,7 +60,9 @@ export const MovieCard = ({ movie }) => {
         <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
           <Button variant="link">Open</Button>
         </Link>
-        <Button onClick={addFavoriteMovie}>Add to Fav</Button>
+        {!isFavorite ? (
+          <Button onClick={addFavoriteMovie}>+</Button>
+        ) : null}
       </Card.Body>
     </Card>
   );
