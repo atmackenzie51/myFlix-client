@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Col, Row, Container } from "react-bootstrap";
 import { Button, Card, Form, CardGroup } from "react-bootstrap";
 
@@ -14,8 +14,9 @@ export const ProfileView = ({ onDeleteAccount }) => {
   const [birthday, setBirthday] = useState(user ? user.Birthday : "");
   const [password, setPassword] = useState(user ? user.Password : "");
   const [email, setEmail] = useState(user ? user.Email : "");
+  const [favoriteMovieTitles, setFavoriteMovieTitles] = useState([]);
 
-  let favMovies = user.favoriteMovies ? movies.filter((movie) => user.favoriteMovies.includes(movie._id)) : [];
+  //let favMovies = user.favoriteMovies ? movies.filter((movie) => user.favoriteMovies.includes(movie._id)) : [];
 
   //update user profile
   const handleUpdate = (event) => {
@@ -72,6 +73,28 @@ export const ProfileView = ({ onDeleteAccount }) => {
     });
   };
 
+  //converting movieIDs to their title
+  useEffect(() => {
+    const fetchFavoriteMovieTitles = async () => {
+      try {
+        const titles = await Promise.all(
+          user.FavoriteMovies.map(async (movieTitle) => {
+            const response = await fetch(`https://movieflix-app-d827ee527a6d.herokuapp.com/movies/${movieTitle}`, {
+              headers: { Authorization: `Bearer ${storedToken}` }
+            });
+            const movie = await response.json();
+            return movie.Title;
+          })
+        );
+        setFavoriteMovieTitles(titles);
+      } catch (error) {
+        console.error('Error fetching movie titles:', error);
+      }
+    };
+
+    fetchFavoriteMovieTitles();
+  }, [user.FavoriteMovies]);
+
 
   return (
     <Container className="justify-content-md-center">
@@ -84,7 +107,7 @@ export const ProfileView = ({ onDeleteAccount }) => {
               <Card.Text>Username : {storedUser.Username}</Card.Text>
               <Card.Text>Email : {storedUser.Email}</Card.Text>
               <Card.Text>Birthday: {new Date(storedUser.Birthday).toUTCString().replace('T', ' ').substr(0, 16)}</Card.Text>
-              <Card.Text>Favorite Movies: {storedUser.FavoriteMovies}</Card.Text>
+              <Card.Text>Favorite Movies: {favoriteMovieTitles.join(', ')}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
