@@ -46,8 +46,13 @@ $border-default: 2px solid black;
 }
 
 .signup-login-page,
-.movie-card {
+.movie-card,
+.profile-page {
   @extend .shared-style;
+}
+
+.bold-text {
+  font-weight: bold;
 }
 
 .form-input {
