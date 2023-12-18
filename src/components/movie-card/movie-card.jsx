@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { HeartFill } from "react-bootstrap-icons";
 
 
 export const MovieCard = ({ movie, user, setUser, token }) => {
@@ -21,7 +22,7 @@ export const MovieCard = ({ movie, user, setUser, token }) => {
     }
   }, [favMovies, movie._id]);
 
-
+  //adding a movie to favorites
   const addFavoriteMovie = () => {
     fetch(
       `https://movieflix-app-d827ee527a6d.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
@@ -33,17 +34,47 @@ export const MovieCard = ({ movie, user, setUser, token }) => {
           const updatedUser = await response.json();
           localStorage.setItem('user', JSON.stringify(updatedUser));
           setUser(updatedUser);
-          alert("Favorite added");
+          alert("Added to Favorites");
         } else {
           console.log("Failed to add fav movie");
         }
       })
       .then((user) => {
         if (user) {
-          alert("successfully added to favorites");
+          alert("successfully added to Favorites");
           localStorage.setItem("user", JSON.stringify(user));
           setUser(user);
           setIsFavorite(true);
+        }
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
+  //removing a movie from favorites
+  const removeFavoriteMovie = () => {
+    fetch(
+      `https://movieflix-app-d827ee527a6d.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
+      { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
+    )
+      .then(async (response) => {
+        console.log(response)
+        if (response.ok) {
+          const updatedUser = await response.json();
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+          setUser(updatedUser);
+          alert("Removed from Favorites");
+        } else {
+          console.log("Failed to remove fav movie");
+        }
+      })
+      .then((user) => {
+        if (user) {
+          alert("successfully removed from Favorites");
+          localStorage.setItem("user", JSON.stringify(user));
+          setUser(user);
+          setIsFavorite(false);
         }
       })
       .catch((error) => {
@@ -58,12 +89,18 @@ export const MovieCard = ({ movie, user, setUser, token }) => {
       <Card.Body>
         <Card.Title>{movie.Title}</Card.Title>
         <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
-          <Button variant="link">Open</Button>
+          <Button variant="link">View Details</Button>
         </Link>
-        {!isFavorite ? (
-          <Button onClick={addFavoriteMovie}>+</Button>
-        ) : null}
       </Card.Body>
+      <Card.Footer className="d-flex justify-content-end">
+        {!isFavorite ? (
+          <Button onClick={addFavoriteMovie}>
+            <HeartFill />
+          </Button>
+        ) : (
+          <Button onClick={removeFavoriteMovie}>-</Button>
+        )}
+      </Card.Footer>
     </Card>
   );
 };

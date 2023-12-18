@@ -101,18 +101,18 @@ export const ProfileView = ({ onDeleteAccount }) => {
       {/* This displays the current user's profile information */}
       <Row>
         <Col>
-          <Card>
+          <Card className="profile-page">
             <Card.Body>
               <Card.Title>Profile Information:</Card.Title>
-              <Card.Text>Username : {storedUser.Username}</Card.Text>
-              <Card.Text>Email : {storedUser.Email}</Card.Text>
-              <Card.Text>Birthday: {new Date(storedUser.Birthday).toUTCString().replace('T', ' ').substr(0, 16)}</Card.Text>
-              <Card.Text>Favorite Movies: {favoriteMovieTitles.join(', ')}</Card.Text>
+              <Card.Text><span className="bold-text">Username:</span> {storedUser.Username}</Card.Text>
+              <Card.Text><span className="bold-text">Email:</span> {storedUser.Email}</Card.Text>
+              <Card.Text><span className="bold-text">Birthday:</span> {new Date(storedUser.Birthday).toUTCString().replace('T', ' ').substr(0, 16)}</Card.Text>
+              <Card.Text><span className="bold-text">Favorite Movies:</span> {favoriteMovieTitles.join(', ')}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
         <Col>
-          <Card>
+          <Card className="profile-page">
             <Card.Title>Update Profile</Card.Title>
             <Form onSubmit={handleUpdate}>
               <Form.Group >
@@ -153,16 +153,20 @@ export const ProfileView = ({ onDeleteAccount }) => {
                   placeholder="mm/dd/yyyy"
                 />
               </Form.Group>
-              <Button className="button-custom" type="submit">
-                Update
-              </Button>
+              <Form.Group>
+                <Button className="button-custom" type="submit">
+                  Update
+                </Button>
+              </Form.Group>
             </Form>
-            <Form>
-              <Form.Label>Delete Profile Here</Form.Label>
+          </Card>
+          <Card className="profile-page">
+            <Card.Body>
+              <Card.Title>Delete Profile Here:</Card.Title>
               <Button onClick={handleDelete} className="button-custom" type="submit">
                 Delete
               </Button>
-            </Form>
+            </Card.Body>
           </Card>
         </Col>
       </Row>
