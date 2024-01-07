@@ -40,17 +40,15 @@ export const NavigationBar = ({ user, onLoggedOut, searchQuery, setSearchQuery }
                   <Nav.Link as={Link} to="/profile"> Profile </Nav.Link>
                   <Nav.Link onClick={onLoggedOut} className="ms-auto">Logout</Nav.Link>
                   <Form inline >
-                    <Row>
-                      <Col xs="auto">
-                        <Form.Control
-                          type="text"
-                          placeholder="Search Movies Titles"
-                          className="ms-md-3 me-3 w-100"
-                          value={searchQuery}
-                          onChange={handleSearch}
-                        />
-                      </Col>
-                    </Row>
+                    <Col xs="auto">
+                      <Form.Control
+                        type="text"
+                        placeholder="Search Movies Titles"
+                        className="ms-md-3 me-3 w-100"
+                        value={searchQuery}
+                        onChange={handleSearch}
+                      />
+                    </Col>
                   </Form>
                 </>
               )}
