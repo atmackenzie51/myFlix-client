@@ -16,7 +16,7 @@ $border-default: 2px solid black;
   background-color: $primary;
   color: $body-color;
   transition: background-color 0.3s ease;
-  border: $border-default;
+  border: none;
 
   &:hover {
     background-color: darken($primary, 30%); // Darken the background color on hover
