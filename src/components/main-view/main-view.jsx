@@ -16,6 +16,7 @@ export const MainView = () => {
   const [movies, setMovies] = useState([]);
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
+  const [searchQuery, setSearchQuery] = useState("");
 
 
   useEffect(() => {
@@ -42,12 +43,22 @@ export const MainView = () => {
     localStorage.clear();
   }
 
+  //filter movies by title
+  const filterMovies = movies.filter(movie => {
+    if (searchQuery) {
+      return movie.Title.toLowerCase().includes(searchQuery.toLowerCase());
+    }
+    return true;
+  });
 
   return (
     <BrowserRouter>
       <NavigationBar
         user={user}
         onLoggedOut={clearSession}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        filterMovies={filterMovies}
       />
       <Row className="justify-content-md-center mt-3">
         <Routes>
@@ -119,7 +130,7 @@ export const MainView = () => {
                   <Navigate to="/login" replace />
                 ) : (
                   <>
-                    {movies.map((movie) => (
+                    {filterMovies.map((movie) => (
                       <Col className="mb-4" key={movie._id} md={3}>
                         <MovieCard movie={movie} user={user} token={token} setUser={setUser} />
                       </Col>
